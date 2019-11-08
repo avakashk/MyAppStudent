@@ -1,10 +1,5 @@
 package com.avak.controller;
 
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletException;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -12,11 +7,30 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 public class ChangePassServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		boolean foundCookie=false;
+		Cookie[] cookies=req.getCookies();
+		for(Cookie cookie:cookies)
+		{
+			if(cookie.getName().equals("sid"));
+			foundCookie=true;
+		}
+		
+		if(foundCookie)
+		{
+		req.getRequestDispatcher("header.jsp").include(req, resp); 
+		
 		resp.setContentType("text/html");
 		PrintWriter out = resp.getWriter();
 
@@ -41,6 +55,9 @@ public class ChangePassServlet extends HttpServlet {
 				} else {
 					out.print("Failed to Change Password");
 				}
+				
+				req.getRequestDispatcher("footer.jsp").include(req, resp); 
+
 
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -57,6 +74,11 @@ public class ChangePassServlet extends HttpServlet {
 		}else
 		{
 			out.print("The new passwords doesn't match");
+		}
+		
+		}else
+		{
+			req.getRequestDispatcher("login.jsp").forward(req, resp);
 		}
 
 	}

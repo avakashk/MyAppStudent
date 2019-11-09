@@ -7,8 +7,18 @@
 <title>Insert title here</title>
 </head>
 <body>
-<a href="advancesearch.jsp">Advance Search </a> <br></br>
-<a href="graingersearch.jsp">Gringer Search </a> <br></br>
-<a href="ssearch.jsp">Student Search </a> <br></br>
+
+<form action="ssearch"  method="get">
+<fieldset>
+<legend>Search for a Student</legend>
+<label>Reg no : <input type="text" name="regno"/></label>
+<input type="submit" value="submit">
+
+</fieldset>
+
+
+
+</form>
+
 </body>
 </html>

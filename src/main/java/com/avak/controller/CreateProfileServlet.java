@@ -7,11 +7,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.avak.model.StudentBean;
 
@@ -21,6 +21,9 @@ public class CreateProfileServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
+		PrintWriter out = response.getWriter();
+
 		StudentBean stu = new StudentBean();
 		stu.setRegno(Integer.parseInt(request.getParameter("regno")));
 		stu.setFname(request.getParameter("fname"));
@@ -34,16 +37,20 @@ public class CreateProfileServlet extends HttpServlet {
 		PreparedStatement stmt = null;
 		PreparedStatement stmt1 = null;
 		PreparedStatement stmt2 = null;
-		boolean foundCookie = false;
 
-		Cookie[] cookies = request.getCookies();
-		for (Cookie cookie : cookies) {
-			if (cookie.getName().equals("sid"))
-			{
-				foundCookie = true;
-			}
-		}
-		if (foundCookie) {
+		/** Cookie way of id verification **/
+
+		/*
+		 * boolean foundCookie = false;
+		 * 
+		 * Cookie[] cookies = request.getCookies(); for (Cookie cookie : cookies) { if
+		 * (cookie.getName().equals("sid")) { foundCookie = true; } } if (foundCookie) {
+		 */
+
+		/** Session way of id verification **/
+
+		HttpSession session = request.getSession(false);
+		if (session != null) {
 
 			try {
 
@@ -74,7 +81,6 @@ public class CreateProfileServlet extends HttpServlet {
 				int i2 = stmt2.executeUpdate();
 
 				response.setContentType("text/html");
-				PrintWriter out = response.getWriter();
 				request.getRequestDispatcher("footer.jsp").include(request, response);
 
 				if (i > 0 & i1 > 0 & i2 > 0) {

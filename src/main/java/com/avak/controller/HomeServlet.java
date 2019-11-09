@@ -9,18 +9,22 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class HomeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		PrintWriter out = response.getWriter();
 
-		Cookie[] cookies = request.getCookies();
+		// Cookie way of identity verification
+		
+		/*Cookie[] cookies = request.getCookies();
 		int regno=0;
 		boolean foundCookie = false;
 		for (Cookie cookie : cookies) {
@@ -29,11 +33,18 @@ public class HomeServlet extends HttpServlet {
 				foundCookie = true;
 			} 
 		}
-		if (foundCookie) {
+		if (foundCookie) {*/
+		
+		// Session way of identity verification
+		
+		
+		HttpSession session=request.getSession(false);
+		if(session!=null)
+		{
 			Connection con = null;
 			PreparedStatement pstmt = null;
 			ResultSet rs = null;
-			PrintWriter out = response.getWriter();
+			int regno=(Integer)session.getAttribute("regno");
 
 			try {
 				Class.forName(getServletContext().getInitParameter("dname")).newInstance();

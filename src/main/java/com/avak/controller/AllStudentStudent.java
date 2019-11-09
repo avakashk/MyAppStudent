@@ -11,10 +11,10 @@ import java.sql.Statement;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class AllStudentStudent extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -32,7 +32,7 @@ public class AllStudentStudent extends HttpServlet {
 
 		// Verifying cookies
 
-		boolean foundCookie = false;
+		/*boolean foundCookie = false;
 
 		Cookie[] cookies = request.getCookies();
 		for (Cookie cookie : cookies) {
@@ -40,7 +40,13 @@ public class AllStudentStudent extends HttpServlet {
 				foundCookie = true;
 			}
 		}
-		if (foundCookie) {
+		if (foundCookie) {*/
+		
+		// Session way of verification
+		
+		HttpSession session=request.getSession(false);
+		if(session!=null)
+		{
 
 			try {
 

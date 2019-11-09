@@ -9,17 +9,21 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 
 public class StudentSearch extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		boolean foundCookie=false;
+		PrintWriter out=response.getWriter();
+
+		//Cookie method of identity validation
+		
+		/*boolean foundCookie=false;
 		Cookie[] cookies=request.getCookies();
 		for(Cookie cookie:cookies)
 		{
@@ -29,7 +33,18 @@ public class StudentSearch extends HttpServlet {
 			}
 		}
 		if(foundCookie)
+		{*/
+		
+		// Session way of identity validation
+		
+		HttpSession session=request.getSession(false);
+		if(session==null)
 		{
+			out.println("You have not logged in yet");
+			request.getRequestDispatcher("login.jsp").include(request, response);
+		}else
+		{
+			
 			Connection con=null;
 			ResultSet rs=null;
 			PreparedStatement stmt=null;
@@ -42,7 +57,6 @@ public class StudentSearch extends HttpServlet {
 				stmt=con.prepareStatement(query);
 				stmt.setInt(1, Integer.parseInt(request.getParameter("regno")));
 				rs = stmt.executeQuery();
-				PrintWriter out=response.getWriter();
 				
 				
 				if(rs.next())
@@ -69,7 +83,7 @@ public class StudentSearch extends HttpServlet {
 					}
 					out.println("</pre>\r\n" + "</body>\r\n" + "</html>");
 				} else {
-					out.print("Incorrect Credentials");
+					out.println("Incorrect Credentials");
 				
 				}
 				
@@ -92,10 +106,14 @@ public class StudentSearch extends HttpServlet {
 					e.printStackTrace();
 				}
 			}
-		}else
+		}
+		
+		//Else Block of Cookie way of identity validation 
+		
+		/*else
 		{
 			request.getRequestDispatcher("login.jsp").forward(request, response);
-		}
+		}*/
 	}
 
 }

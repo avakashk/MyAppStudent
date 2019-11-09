@@ -9,10 +9,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -20,10 +20,23 @@ public class LoginServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		//Creating Session after sucessful login
+		
+		HttpSession session=request.getSession(false);
+		
+		if(session.getAttribute("regno")!=null)
+		{
+			String redirect="http://localhost:8080/MyAppStudent/HomeServlet";
+			response.sendRedirect(redirect);
+		}else {
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
+		int regno=Integer.parseInt(request.getParameter("regno"));
+		session=request.getSession();
+		session.setAttribute("regno", regno);
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
@@ -39,13 +52,17 @@ public class LoginServlet extends HttpServlet {
 			
 			//Adding Cookie After Sucessfull Log in
 			
-			Cookie ck=new Cookie("sid",request.getParameter("regno"));
-			response.addCookie(ck);
+//			Cookie ck=new Cookie("sid",request.getParameter("regno"));
+//			response.addCookie(ck);
+			
+			
+			
+			 
 
 			response.setContentType("text/html");
 			PrintWriter out = response.getWriter();
 			if (rs.next()) {
-				int regno = rs.getInt("regno");
+				regno = rs.getInt("regno");
 				String fname = rs.getString(2);
 				String lname = rs.getString(3);
 				String gfname = rs.getString(4);
@@ -85,6 +102,7 @@ public class LoginServlet extends HttpServlet {
 			}
 
 		}
+	}
 	}
 
 }

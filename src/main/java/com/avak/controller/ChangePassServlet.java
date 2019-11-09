@@ -8,31 +8,36 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class ChangePassServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
-		boolean foundCookie=false;
+		PrintWriter out = resp.getWriter();
+
+		/** Cookie way of identity verification**/
+/*		boolean foundCookie=false;
 		Cookie[] cookies=req.getCookies();
 		for(Cookie cookie:cookies)
 		{
 			if(cookie.getName().equals("sid"));
 			foundCookie=true;
 		}
+*/
+		/** Session way of id verification **/
 		
-		if(foundCookie)
+		HttpSession session=req.getSession(false);
+		
+		if(session!=null)
 		{
 		req.getRequestDispatcher("header.jsp").include(req, resp); 
 		
 		resp.setContentType("text/html");
-		PrintWriter out = resp.getWriter();
 
 		if (req.getParameter("npassword").equals(req.getParameter("cpassword"))) {
 			Connection con = null;

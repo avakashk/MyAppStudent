@@ -21,6 +21,7 @@ public class Gsearch extends HttpServlet {
 		String gainger="https://www.grainger.com/search?searchBar=true&searchQuery=";
 		String url=gainger+keyword;
 		
+		/** Code to check context attributes and parameters **/
 		ServletContext context=getServletContext();
 		Enumeration<String> att= context.getAttributeNames();
 		while(att.hasMoreElements())
@@ -36,6 +37,9 @@ public class Gsearch extends HttpServlet {
 		
 		String name=context.getInitParameter("author");
 		System.out.println(name);
+		/** Code ends here **/
+		
+		
 		
 		resp.sendRedirect(url);
 		
